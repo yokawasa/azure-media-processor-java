@@ -11,6 +11,7 @@ public class Constants {
     public static final Map<String, String> MediaProcessorType_MAP;
         static {
             HashMap<String,String> m = new HashMap<String,String>();
+            m.put("1", "Media Encoder Standard");
             m.put("10", "Azure Media Indexer");
             m.put("11", "Azure Media Indexer 2 Preview");
             m.put("12", "Azure Media Hyperlapse");
@@ -18,6 +19,7 @@ public class Constants {
             m.put("14", "Azure Media Motion Detector");
             m.put("15", "Azure Media Stabilizer");
             m.put("16", "Azure Media Video Thumbnails");
+            m.put("17", "Azure Media OCR");
             MediaProcessorType_MAP = Collections.unmodifiableMap(m); 
         }
     public Constants() { }

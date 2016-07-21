@@ -115,7 +115,7 @@ public class MediaProcessRunner extends Subject implements Runnable {
             }
             checkJobStatus(jobId);
 
-            downloadIndexedAssetFilesFromJob(jobInfo);
+            downloadProcessedAssetFilesFromJob(jobInfo);
         } catch (Exception e) {
              System.err.println("Exception occured while running media processing job: "
                                         + e.getMessage());
@@ -170,12 +170,12 @@ public class MediaProcessRunner extends Subject implements Runnable {
         }
     }
 
-    private synchronized void downloadIndexedAssetFilesFromJob(JobInfo jobInfo)
+    private synchronized void downloadProcessedAssetFilesFromJob(JobInfo jobInfo)
             throws ServiceException, URISyntaxException, FileNotFoundException, StorageException, IOException {
 
         final ListResult<AssetInfo> outputAssets;
         outputAssets = service.list(Asset.list(jobInfo.getOutputAssetsLink()));
-        AssetInfo indexedAsset = outputAssets.get(0);
+        AssetInfo processedAsset = outputAssets.get(0);
         final AccessPolicyInfo downloadAccessPolicy;
         final LocatorInfo downloadLocator;
 
@@ -189,17 +189,17 @@ public class MediaProcessRunner extends Subject implements Runnable {
         downloadLocator = service.create(
                             Locator.create(
                                 downloadAccessPolicy.getId(),
-                                indexedAsset.getId(),
+                                processedAsset.getId(),
                                 LocatorType.SAS
                             )
                         );
 
-        for (AssetFileInfo assetFile : service.list(AssetFile.list(indexedAsset.getAssetFilesLink()))) {
+        for (AssetFileInfo assetFile : service.list(AssetFile.list(processedAsset.getAssetFilesLink()))) {
             String fileName = assetFile.getName();
             String outFileName=fileName;
             // Rename JobResult file not to overwrite it in the directory where all job output files are to be stored
             if (fileName.equals("JobResult.txt")) {
-                outFileName = "JobResult_" + indexedAsset.getName();
+                outFileName = "JobResult_" + processedAsset.getName();
             }
             String locatorPath = downloadLocator.getPath();
             int startOfSas = locatorPath.indexOf("?");

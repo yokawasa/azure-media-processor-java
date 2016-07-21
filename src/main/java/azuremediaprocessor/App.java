@@ -33,6 +33,7 @@ public class App
         Options opts = new Options();
         opts.addOption("c", "config", true, "(Required) App config file. ex) app.config");
         opts.addOption("t", "type", true, "(Required) Media Processor type (Integer):\n" 
+                                        + "1 -> Media Encoder Standard\n"
                                         + "10 -> Azure Media Indexer\n"
                                         + "11 -> Azure Media Indexer 2 Preview\n"
                                         + "12 -> Azure Media Hyperlapse\n"
@@ -40,6 +41,7 @@ public class App
                                         + "14 -> Azure Media Motion Detector\n"
                                         + "15 -> Azure Media Stabilizer\n"
                                         + "16 -> Azure Media Video Thumbnails\n"
+                                        + "17 -> Azure Media OCR\n"
                                 );
         opts.addOption("f", "file", true, "(Optional) Uploading file. By specifing this, you start from uploading file");
         opts.addOption("a", "assetname", true, "(Required) Asset Name to process media indexing");
