@@ -37,6 +37,7 @@ public class MediaProcessRunner extends Subject implements Runnable {
     private String assetName;
     private String taskParamFile;
     private String outputDir;
+    private Boolean downloadFiles;
     private AssetInfo mediaAsset;
     private MediaContract service;
 
@@ -50,13 +51,15 @@ public class MediaProcessRunner extends Subject implements Runnable {
             MediaContract service,
             String assetName,
             String taskParamFile,
-            String outputDir) {
+            String outputDir,
+            Boolean downloadFiles) {
         this.state = new State();
         this.state.setValue("Initiating");
         this.service = service;
         this.assetName = assetName;
         this.taskParamFile = taskParamFile;
         this.outputDir = outputDir;
+        this.downloadFiles = downloadFiles;
     }
 
     public MediaProcessRunner( 
@@ -64,6 +67,7 @@ public class MediaProcessRunner extends Subject implements Runnable {
             String assetName,
             String taskParamFile,
             String outputDir,
+            Boolean downloadFiles,
             String state,
             int progress) {
         this.state = new State();
@@ -71,6 +75,7 @@ public class MediaProcessRunner extends Subject implements Runnable {
         this.assetName = assetName;
         this.taskParamFile = taskParamFile;
         this.outputDir = outputDir;
+        this.downloadFiles = downloadFiles;
         this.state.setValue(state);
         this.state.setProgress(progress);
     }
@@ -115,7 +120,10 @@ public class MediaProcessRunner extends Subject implements Runnable {
             }
             checkJobStatus(jobId);
 
-            downloadProcessedAssetFilesFromJob(jobInfo);
+            // Download output asset files only if opted
+            if (downloadFiles) {
+                downloadProcessedAssetFilesFromJob(jobInfo);
+            }
         } catch (Exception e) {
              System.err.println("Exception occured while running media processing job: "
                                         + e.getMessage());

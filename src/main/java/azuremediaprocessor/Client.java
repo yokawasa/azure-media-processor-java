@@ -117,7 +117,16 @@ public class Client {
     public void RunMediaProcessingJob( String mediaProcessorName,
                                         String assetName,
                                         String taskParamFile,
-                                        String outputDir ) 
+                                        String outputDir )
+                                            throws InterruptedException, ServiceException {
+        this.RunMediaProcessingJob(mediaProcessorName, assetName, taskParamFile, outputDir, true);
+    } 
+
+    public void RunMediaProcessingJob( String mediaProcessorName,
+                                        String assetName,
+                                        String taskParamFile,
+                                        String outputDir,
+                                        Boolean downloadFiles ) 
                                             throws InterruptedException, ServiceException {
         // Use latest media processor
         ListResult<MediaProcessorInfo> mpis
@@ -141,7 +150,9 @@ public class Client {
                                     this.service,
                                     assetName,
                                     taskParamFile,
-                                    outputDir);
+                                    outputDir,
+                                    downloadFiles);
+
         procRunner.addObserver(listener);
 
         Thread procThread = new Thread(procRunner);
