@@ -1,7 +1,11 @@
+Release 0.1.2 - 2016/08/11
+
+	* Added an option to download output asset files
+
 Release 0.1.1 - 2016/07/21
 
-	* added processor: Azure Media OCR
-	* added processor: Media Encoder Standard
+	* Added processor: Azure Media OCR
+	* Added processor: Media Encoder Standard
 
 Release 0.1.0 - 2016/06/22
 

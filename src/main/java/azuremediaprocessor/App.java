@@ -29,6 +29,7 @@ public class App
         String assetname = null;
         String paramfile = null;
         String outputdir = null;
+        Boolean downloadfiles = true;
 
         Options opts = new Options();
         opts.addOption("c", "config", true, "(Required) App config file. ex) app.config");
@@ -45,8 +46,9 @@ public class App
                                 );
         opts.addOption("f", "file", true, "(Optional) Uploading file. By specifing this, you start from uploading file");
         opts.addOption("a", "assetname", true, "(Required) Asset Name to process media indexing");
-        opts.addOption("p", "params", true, "(Optional) Azure Media Processor Configuration XML/Json file. ex) default-indexer.config");
+        opts.addOption("p", "params", true, "(Required) Azure Media Processor Configuration XML/Json file. ex) default-indexer.config");
         opts.addOption("o", "output", true, "(Required) Output directory");
+        opts.addOption("d", "download", true, "(Optional) true/false (true by default) Set false if you don't want to download output files");
         BasicParser parser = new BasicParser();
         CommandLine cl;
         HelpFormatter help = new HelpFormatter();
@@ -56,7 +58,7 @@ public class App
             cl = parser.parse(opts, args);
             // handle server option.
             if ( !cl.hasOption("-c") || !cl.hasOption("-a") 
-                    || !cl.hasOption("-t") || !cl.hasOption("-o")) {
+                    || !cl.hasOption("-t") || !cl.hasOption("-o") || !cl.hasOption("-p")) {
                 throw new ParseException("");
             }
             // handle interface option.
@@ -66,10 +68,19 @@ public class App
             assetname = cl.getOptionValue("a");
             paramfile = cl.getOptionValue("p");
             outputdir = cl.getOptionValue("o");
+            String dlopt = cl.getOptionValue("d");
             if (conffile == null || assetname == null 
                     || mptype == null || paramfile == null || outputdir == null 
                     || !Constants.MediaProcessorType_MAP.containsKey(mptype) ) {
                 throw new ParseException("");
+            }
+            // validate download files option
+            if (dlopt != null ) {
+                String dloptlc = dlopt.toLowerCase();
+                if ( !"true".equals(dloptlc) && !"false".equals(dloptlc) ) {
+                    throw new ParseException("");
+                }
+                downloadfiles = Boolean.valueOf(dloptlc);
             }
 
             // handlet destination option.
@@ -84,9 +95,10 @@ public class App
             System.out.println("Asset name : " + assetname);
             System.out.println("Task param file : " + paramfile);
             System.out.println("Output dir : " + outputdir);
+            System.out.println("Download output files : " + Boolean.toString(downloadfiles));
 
         } catch (IOException | ParseException e) {
-            help.printHelp("App -c <app.config> [-f <uploadfile>] -a <assetname> -p <amitaskparam.config> -o <outputdir>", opts);
+            help.printHelp("App -c <app.config> [-f <uploadfile>] -a <assetname> -p <taskparam.config> -o <outputdir> [-d <true/false>]", opts);
             System.exit(1);
         }
        
@@ -119,7 +131,8 @@ public class App
                             Constants.MediaProcessorType_MAP.get(mptype),
                             assetname,
                             paramfile,
-                            outputdir);
+                            outputdir,
+                            downloadfiles);
         } catch ( Exception e ){
             System.err.println("Video indexing failure:" + e);
             System.exit(1);

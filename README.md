@@ -31,13 +31,15 @@ Here is how to execute the application using mvn command:
 Here are args for the application that you specify in running the app:
 
     usage: App -c <app.config> [-f <uploadfile>] -a <assetname> -p
-            <amitaskparam.config> -o <outputdir>
+            <amitaskparam.config> -o <outputdir> [-d <true/false>]
     -a,--assetname <arg>   (Required) Asset Name to process media indexing
     -c,--config <arg>      (Required) App config file. ex) app.config
+    -d,--download <arg>    (Optional) true/false (true by default) Set false
+                           if you don't want to download output files
     -f,--file <arg>        (Optional) Uploading file. By specifing this, you
                             start from uploading file
     -o,--output <arg>      (Required) Output directory
-    -p,--params <arg>      (Optional) Azure Media Processor Configuration
+    -p,--params <arg>      (Required) Azure Media Processor Configuration
                             XML/Json file. ex) default-indexer.config
     -t,--type <arg>        (Required) Media Processor type (Integer):
                             1  -> Media Encoder Standard
