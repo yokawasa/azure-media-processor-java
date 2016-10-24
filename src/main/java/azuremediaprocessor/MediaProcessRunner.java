@@ -3,6 +3,7 @@ package azuremediaprocessor;
 import azuremediaprocessor.Client;
 import azuremediaprocessor.Observer;
 import azuremediaprocessor.Subject;
+import azuremediaprocessor.Constants;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.CloudBlobClient;
 import com.microsoft.azure.storage.blob.CloudBlockBlob;
@@ -124,6 +125,8 @@ public class MediaProcessRunner extends Subject implements Runnable {
             if (downloadFiles) {
                 downloadProcessedAssetFilesFromJob(jobInfo);
             }
+            createAssetInfoFile(jobInfo);
+
         } catch (Exception e) {
              System.err.println("Exception occured while running media processing job: "
                                         + e.getMessage());
@@ -178,12 +181,33 @@ public class MediaProcessRunner extends Subject implements Runnable {
         }
     }
 
+    private synchronized void createAssetInfoFile(JobInfo jobInfo)
+            throws ServiceException, IOException {
+        final ListResult<AssetInfo> outputAssets;
+        outputAssets = service.list(Asset.list(jobInfo.getOutputAssetsLink()));
+        AssetInfo processedAsset = outputAssets.get(0);
+        try {
+            String assetInfoFileName = this.outputDir + "/" + Constants.OUTPUT_ASSET_INFO_FILE;
+            File assetInfoFile = new File(assetInfoFileName);
+            PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(assetInfoFile)));
+            pw.println(String.format("Id %s", processedAsset.getId()));
+            pw.println(String.format("Name %s", processedAsset.getName()));
+            pw.println(String.format("StorageAccountName %s", processedAsset.getStorageAccountName()));
+            pw.println(String.format("StorageUrl %s", processedAsset.getUri()));
+            pw.close();
+        } catch(IOException e){
+             System.err.println("Exception occured while writing asset info file: "
+                                        + e.getMessage());
+        }
+    }
+
     private synchronized void downloadProcessedAssetFilesFromJob(JobInfo jobInfo)
             throws ServiceException, URISyntaxException, FileNotFoundException, StorageException, IOException {
 
         final ListResult<AssetInfo> outputAssets;
         outputAssets = service.list(Asset.list(jobInfo.getOutputAssetsLink()));
         AssetInfo processedAsset = outputAssets.get(0);
+
         final AccessPolicyInfo downloadAccessPolicy;
         final LocatorInfo downloadLocator;
 
@@ -205,16 +229,13 @@ public class MediaProcessRunner extends Subject implements Runnable {
         for (AssetFileInfo assetFile : service.list(AssetFile.list(processedAsset.getAssetFilesLink()))) {
             String fileName = assetFile.getName();
             String outFileName=fileName;
-            // Rename JobResult file not to overwrite it in the directory where all job output files are to be stored
-            if (fileName.equals("JobResult.txt")) {
-                outFileName = "JobResult_" + processedAsset.getName();
-            }
             String locatorPath = downloadLocator.getPath();
             int startOfSas = locatorPath.indexOf("?");
             String blobPath = locatorPath + fileName;
             if (startOfSas >= 0) {
                 blobPath = locatorPath.substring(0, startOfSas) + "/" + fileName + locatorPath.substring(startOfSas);
             }
+
             URI baseUri = new URI(blobPath);
             CloudBlobClient blobClient = new CloudBlobClient(baseUri);
             String localFileName = this.outputDir + "/" + outFileName;
