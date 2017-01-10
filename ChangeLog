@@ -1,3 +1,8 @@
+Release 0.1.4 - 2017/01/10
+
+	* Added processor: Azure Media Redactor
+	* Added processor configuration sample: Redaction, Indexer2 (Japanese & English)
+
 Release 0.1.3 - 2016/10/10
 
 	* Added a functionality to create an output asset infomation file named ASSETINFO.txt

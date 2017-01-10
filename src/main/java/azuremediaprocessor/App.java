@@ -43,6 +43,7 @@ public class App
                                         + "15 -> Azure Media Stabilizer\n"
                                         + "16 -> Azure Media Video Thumbnails\n"
                                         + "17 -> Azure Media OCR\n"
+                                        + "18 -> Azure Media Redactor\n"
                                 );
         opts.addOption("f", "file", true, "(Optional) Uploading file. By specifing this, you start from uploading file");
         opts.addOption("a", "assetname", true, "(Required) Asset Name to process media indexing");

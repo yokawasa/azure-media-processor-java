@@ -21,6 +21,7 @@ public class Constants {
             m.put("15", "Azure Media Stabilizer");
             m.put("16", "Azure Media Video Thumbnails");
             m.put("17", "Azure Media OCR");
+            m.put("18", "Azure Media Redactor");
             MediaProcessorType_MAP = Collections.unmodifiableMap(m); 
         }
     public Constants() { }

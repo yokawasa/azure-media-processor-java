@@ -13,6 +13,7 @@ azure-media-processor-java currently supports only Media analytics type of proce
  * Azure Media Motion Detector
  * Azure Media Face Detector
  * Azure Media Hyperlapse
+ * Azure Media Redactor
 
 But it has plan to support the following processors as well in near future:
 
@@ -51,4 +52,5 @@ Here are args for the application that you specify in running the app:
                             15 -> Azure Media Stabilizer
                             16 -> Azure Media Video Thumbnails
                             17 -> Azure Media OCR
+                            18 -> Azure Media Redactor
 

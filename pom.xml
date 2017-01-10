@@ -4,7 +4,7 @@
     <groupId>azuremediaprocessor</groupId>
     <artifactId>azure-media-processor-java</artifactId>
     <packaging>jar</packaging>
-    <version>0.1.3</version>
+    <version>0.1.4</version>
     <name>azure-media-processor-java</name>
     <url>http://maven.apache.org</url>
 
