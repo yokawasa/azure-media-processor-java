@@ -46,7 +46,7 @@ public class App
                                         + "18 -> Azure Media Redactor\n"
                                 );
         opts.addOption("f", "file", true, "(Optional) Uploading file. By specifing this, you start from uploading file");
-        opts.addOption("a", "assetname", true, "(Required) Asset Name to process media indexing");
+        opts.addOption("a", "assetname", true, "(Required) Asset Name to process media content");
         opts.addOption("p", "params", true, "(Required) Azure Media Processor Configuration XML/Json file. ex) default-indexer.config");
         opts.addOption("o", "output", true, "(Required) Output directory");
         opts.addOption("d", "download", true, "(Optional) true/false (true by default) Set false if you don't want to download output files");
@@ -135,7 +135,7 @@ public class App
                             outputdir,
                             downloadfiles);
         } catch ( Exception e ){
-            System.err.println("Video indexing failure:" + e);
+            System.err.println("Video processing failure:" + e);
             System.exit(1);
         }
     }
